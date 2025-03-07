@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct ColorItem : Identifiable {
-    let id: Int
-    let color: Color
+struct ColorItem: Identifiable {
+    var id: Int
+    var color: Color
 }

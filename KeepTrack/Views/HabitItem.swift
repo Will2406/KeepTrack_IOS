@@ -11,6 +11,7 @@ struct HabitItem: View {
     var title: String
     var category: String
     var colorItem: Color
+    var maxCounterValue: Int
     @State var counterValue: Int = 0
     
     var body: some View {
@@ -31,7 +32,7 @@ struct HabitItem: View {
                         .bold()
                 }.frame(maxWidth: .infinity)
                 
-                CounterHabitButton(maxCounterValue: 5, backgrounColor: colorItem, counter: $counterValue)
+                CounterHabitButton(maxCounterValue: maxCounterValue, backgrounColor: colorItem, counter: $counterValue)
                 
             }.frame(maxWidth: .infinity)
                 .padding([.horizontal], 12)
@@ -47,8 +48,8 @@ struct HabitItem: View {
 
 #Preview {
     VStack{
-        HabitItem(title: "Tomar Agua", category: "Salud", colorItem: .purple)
-        HabitItem(title: "Ir al Gym", category: "Salud", colorItem: .red)
+        HabitItem(title: "Tomar Agua", category: "Salud", colorItem: .purple, maxCounterValue:5)
+        HabitItem(title: "Ir al Gym", category: "Salud", colorItem: .red, maxCounterValue:8)
     }
     
 }

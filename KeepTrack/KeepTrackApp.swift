@@ -7,11 +7,21 @@
 
 import SwiftUI
 
+
 @main
-struct KeepTrackApp: App {
+struct HabitsApp: App {
+    
+    init() {
+        setupFirebase()
+    }
+    
+    func setupFirebase() {
+        
+    }
+    
     var body: some Scene {
         WindowGroup {
-            CreateHabitView()
+            HabitNavigationView()
         }
     }
 }
