@@ -51,7 +51,8 @@ class HabitViewModel: ObservableObject {
                         let category = data["category"] as? String,
                         let colorHex = data["colorHex"] as? String,
                         let frequencyString = data["frequency"] as? String,
-                        let counter = data["counter"] as? Int,
+                        let maxcounter = data["maxCounter"] as? Int,
+                        let initCounter = data["counter"] as? Int,
                         let frequency = HabitFrequency(rawValue: frequencyString)
                     else {
                         return nil
@@ -63,7 +64,8 @@ class HabitViewModel: ObservableObject {
                         category: category,
                         colorItem: Color(hex: colorHex),
                         frequency: frequency,
-                        counter: counter
+                        counter: initCounter,
+                        maxCounter: maxcounter
                     )
                 }
                 
@@ -81,7 +83,8 @@ class HabitViewModel: ObservableObject {
             "category": habit.category,
             "colorHex": colorHex,
             "frequency": habit.frequency.rawValue,
-            "counter": habit.counter,
+            "counter": 0,
+            "maxCounter": habit.maxCounter,
             "createdAt": FieldValue.serverTimestamp()
         ]
         
@@ -106,6 +109,36 @@ class HabitViewModel: ObservableObject {
             
             if let error = error {
                 self.errorMessage = "Error eliminando hábito: \(error.localizedDescription)"
+            }
+        }
+    }
+    
+    func incrementHabitCounter(habitId: String, currentCounter: Int, maxCounter: Int) {
+        if currentCounter >= maxCounter {
+            return
+        }
+        
+        let newCounter = currentCounter + 1
+        
+        db.collection("habits").document(habitId).updateData([
+            "counter": newCounter
+        ]) { [weak self] error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                self.errorMessage = "Error actualizando contador: \(error.localizedDescription)"
+            }
+        }
+    }
+    
+    func resetHabitCounter(habitId: String) {
+        db.collection("habits").document(habitId).updateData([
+            "counter": 0
+        ]) { [weak self] error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                self.errorMessage = "Error restableciendo contador: \(error.localizedDescription)"
             }
         }
     }

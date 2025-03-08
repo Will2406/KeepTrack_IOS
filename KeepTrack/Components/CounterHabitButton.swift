@@ -10,8 +10,8 @@ import SwiftUI
 struct CounterHabitButton: View {
     let maxCounterValue: Int
     let backgrounColor: Color
-    @Binding var counter: Int
-
+    let counter: Int
+    let onIncrement: () -> Void
     
     var body: some View {
         var valuePercentView: CGFloat {
@@ -49,7 +49,7 @@ struct CounterHabitButton: View {
                     .cornerRadius(8)
                     .onTapGesture {
                         if(counter < maxCounterValue){
-                            counter += 1
+                            onIncrement()
                         }
                     }
                     
@@ -63,3 +63,11 @@ struct CounterHabitButton: View {
     }
 }
 
+#Preview {
+    CounterHabitButton(
+        maxCounterValue: 5,
+        backgrounColor: .blue,
+        counter: 2,
+        onIncrement: {}
+    )
+}

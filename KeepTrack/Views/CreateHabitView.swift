@@ -150,7 +150,8 @@ struct CreateHabitView: View {
             category: categoryValue,
             colorItem: getSelectedColor(),
             frequency: getSelectedFrequency(),
-            counter: counter
+            counter: 0,
+            maxCounter: counter
         )
         
         viewModel.addHabit(habit: newHabit)

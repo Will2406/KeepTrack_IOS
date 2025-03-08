@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct HabitItem: View {
+    @EnvironmentObject var viewModel: HabitViewModel
+    
+    var id: String
     var title: String
     var category: String
     var colorItem: Color
     var maxCounterValue: Int
-    @State var counterValue: Int = 0
+    var counter: Int
     
     var body: some View {
         VStack{
@@ -32,7 +35,18 @@ struct HabitItem: View {
                         .bold()
                 }.frame(maxWidth: .infinity)
                 
-                CounterHabitButton(maxCounterValue: maxCounterValue, backgrounColor: colorItem, counter: $counterValue)
+                CounterHabitButton(
+                    maxCounterValue: maxCounterValue,
+                    backgrounColor: colorItem,
+                    counter: counter,
+                    onIncrement: {
+                        viewModel.incrementHabitCounter(
+                            habitId: id,
+                            currentCounter: counter,
+                            maxCounter: maxCounterValue
+                        )
+                    }
+                )
                 
             }.frame(maxWidth: .infinity)
                 .padding([.horizontal], 12)
@@ -48,8 +62,24 @@ struct HabitItem: View {
 
 #Preview {
     VStack{
-        HabitItem(title: "Tomar Agua", category: "Salud", colorItem: .purple, maxCounterValue:5)
-        HabitItem(title: "Ir al Gym", category: "Salud", colorItem: .red, maxCounterValue:8)
+        HabitItem(
+            id: "1",
+            title: "Tomar Agua",
+            category: "Salud",
+            colorItem: .purple,
+            maxCounterValue: 5,
+            counter: 2
+        )
+        .environmentObject(HabitViewModel())
+        
+        HabitItem(
+            id: "2",
+            title: "Ir al Gym",
+            category: "Salud",
+            colorItem: .red,
+            maxCounterValue: 8,
+            counter: 3
+        )
+        .environmentObject(HabitViewModel())
     }
-    
 }

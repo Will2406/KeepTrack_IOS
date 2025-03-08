@@ -15,4 +15,5 @@ struct Habit: Identifiable {
     var colorItem: Color
     var frequency: HabitFrequency
     var counter: Int
+    var maxCounter: Int
 }
