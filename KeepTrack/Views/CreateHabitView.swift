@@ -73,11 +73,9 @@ struct CreateHabitView: View {
                 HStack {
                     ButtonPicker(index: 1, text: "Diario", selectedIndex: $frequencySelected)
                     ButtonPicker(index: 2, text: "Semanal", selectedIndex: $frequencySelected)
-                    // Se elimina la opción mensual
                     Spacer()
                 }.padding(.horizontal, 12)
                 
-                // Días de la semana (solo si es semanal)
                 if frequencySelected == 2 {
                     SubTitle(text: "Días de la semana", padding: 12)
                     Button(action: {
@@ -149,7 +147,7 @@ struct CreateHabitView: View {
             WeekDayBottomSheet(
                 selection: weekDaySelection,
                 isPresented: $showWeekDayBottomSheet,
-                onSave: { _ in }  // No necesitamos hacer nada aquí, los días se guardarán con el hábito
+                onSave: { _ in }
             )
             .presentationDetents([.height(450)])
             .presentationDragIndicator(.visible)

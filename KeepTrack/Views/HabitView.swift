@@ -103,7 +103,6 @@ struct HabitView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.backgroundApp)
             
-            // Loading overlay
             if viewModel.isLoading {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
@@ -113,7 +112,6 @@ struct HabitView: View {
                     .scaleEffect(1.5)
             }
             
-            // Error alert
             if let errorMessage = viewModel.errorMessage {
                 VStack {
                     Spacer()
@@ -132,7 +130,6 @@ struct HabitView: View {
                 }
             }
             
-            // Diálogo de logro completado
             if viewModel.showAchievementDialog, let completedHabit = viewModel.completedHabit {
                 AchievementDialog(
                     habitTitle: completedHabit.title,
@@ -148,7 +145,6 @@ struct HabitView: View {
                 .environmentObject(viewModel)
         }
         .onAppear {
-            // Verificar si hay hábitos que necesitan reiniciarse
             viewModel.checkAndResetHabits()
         }
     }

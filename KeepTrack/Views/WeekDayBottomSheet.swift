@@ -42,7 +42,6 @@ struct WeekDayBottomSheet: View {
             .padding()
             .background(Color.gray800)
             
-            // Contenido
             ScrollView {
                 WeekDaySelector(selection: selection)
                     .padding(.bottom, 20)

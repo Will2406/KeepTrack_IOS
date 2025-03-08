@@ -22,7 +22,6 @@ class HabitViewModel: ObservableObject {
     init() {
         setupHabitsListener()
         checkAndResetHabits()
-        // Programar verificación diaria a medianoche
         scheduleResetCheck()
     }
     
@@ -63,14 +62,11 @@ class HabitViewModel: ObservableObject {
                         return nil
                     }
                     
-                    // Obtener los días seleccionados si existen
                     let selectedWeekDays = data["selectedWeekDays"] as? [Int] ?? []
                     
-                    // Obtener la fecha del último reinicio
                     let lastResetTimestamp = data["lastResetDate"] as? Timestamp ?? Timestamp(date: Date())
                     let lastResetDate = lastResetTimestamp.dateValue()
                     
-                    // Obtener el historial si existe
                     var history: [String: HabitHistory] = [:]
                     if let historyData = data["history"] as? [String: [String: Any]] {
                         for (dateString, historyEntry) in historyData {

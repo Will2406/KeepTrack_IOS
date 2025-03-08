@@ -98,7 +98,6 @@ struct WeekDaySelector: View {
 
 #Preview {
     let selection = WeekDaySelection()
-    // Preseleccionamos algunos días para el preview
     selection.weekDays[0].isSelected = true
     selection.weekDays[3].isSelected = true
     
