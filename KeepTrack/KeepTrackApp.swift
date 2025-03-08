@@ -16,7 +16,7 @@ struct HabitsApp: App {
     }
     
     func setupFirebase() {
-        
+        FirebaseManager.configure()
     }
     
     var body: some Scene {

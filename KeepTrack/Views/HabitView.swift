@@ -66,7 +66,7 @@ struct HabitView: View {
                    .environmentObject(viewModel)
         }
         .onAppear {
-            viewModel.fetchHabits()
+            viewModel.setupHabitsListener()
         }
     }
 }
