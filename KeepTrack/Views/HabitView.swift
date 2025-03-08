@@ -49,7 +49,9 @@ struct HabitView: View {
                                 category: habit.category,
                                 colorItem: habit.colorItem,
                                 maxCounterValue: habit.maxCounter,
-                                counter: habit.counter
+                                counter: habit.counter,
+                                frequency: habit.frequency,
+                                selectedWeekDays: habit.selectedWeekDays
                             )
                             .listRowInsets(EdgeInsets())
                             .listRowBackground(Color.clear)
@@ -129,10 +131,25 @@ struct HabitView: View {
                         }
                 }
             }
+            
+            // Diálogo de logro completado
+            if viewModel.showAchievementDialog, let completedHabit = viewModel.completedHabit {
+                AchievementDialog(
+                    habitTitle: completedHabit.title,
+                    habitColor: completedHabit.colorItem
+                ) {
+                    viewModel.showAchievementDialog = false
+                    viewModel.completedHabit = nil
+                }
+            }
         }
         .navigationDestination(isPresented: $showCreateHabit) {
             CreateHabitView()
                 .environmentObject(viewModel)
+        }
+        .onAppear {
+            // Verificar si hay hábitos que necesitan reiniciarse
+            viewModel.checkAndResetHabits()
         }
     }
 }

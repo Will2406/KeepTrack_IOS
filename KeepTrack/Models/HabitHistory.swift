@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+
+struct HabitHistory: Codable {
+    var date: Date
+    var completed: Bool
+    var counter: Int
+}

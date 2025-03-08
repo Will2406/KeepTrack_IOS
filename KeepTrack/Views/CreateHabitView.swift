@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct CreateHabitView: View {
 
     @Environment(\.dismiss) private var dismiss
@@ -17,6 +19,8 @@ struct CreateHabitView: View {
     @State private var frequencySelected: Int = 1
     @State private var counterValue: String = ""
     @State private var colorSelected: Int = 1
+    @State private var showWeekDayBottomSheet = false
+    @State private var weekDaySelection = WeekDaySelection()
     
     private let colors = [
         ColorItem(id: 1, color: Color.red),
@@ -36,8 +40,6 @@ struct CreateHabitView: View {
             return .daily
         case 2:
             return .weekly
-        case 3:
-            return .monthly
         default:
             return .daily
         }
@@ -71,8 +73,31 @@ struct CreateHabitView: View {
                 HStack {
                     ButtonPicker(index: 1, text: "Diario", selectedIndex: $frequencySelected)
                     ButtonPicker(index: 2, text: "Semanal", selectedIndex: $frequencySelected)
-                    ButtonPicker(index: 3, text: "Mensual", selectedIndex: $frequencySelected)
+                    // Se elimina la opción mensual
+                    Spacer()
                 }.padding(.horizontal, 12)
+                
+                // Días de la semana (solo si es semanal)
+                if frequencySelected == 2 {
+                    SubTitle(text: "Días de la semana", padding: 12)
+                    Button(action: {
+                        showWeekDayBottomSheet = true
+                    }) {
+                        HStack {
+                            Text(weekDaySelection.getSelectedDaysIds().isEmpty ?
+                                 "Seleccionar días" :
+                                 "\(weekDaySelection.getSelectedDaysIds().count) días seleccionados")
+                                .foregroundColor(.white)
+                            Spacer()
+                            Image(systemName: "calendar")
+                                .foregroundColor(.pink700)
+                        }
+                        .padding()
+                        .background(Color.gray700)
+                        .cornerRadius(8)
+                    }
+                    .padding(.horizontal, 12)
+                }
                 
                 // Intervalo Section
                 SubTitle(text: "Intervalo", padding: 12)
@@ -120,6 +145,15 @@ struct CreateHabitView: View {
         }
         .background(.backgroundApp)
         .navigationBarBackButtonHidden(false)
+        .sheet(isPresented: $showWeekDayBottomSheet) {
+            WeekDayBottomSheet(
+                selection: weekDaySelection,
+                isPresented: $showWeekDayBottomSheet,
+                onSave: { _ in }  // No necesitamos hacer nada aquí, los días se guardarán con el hábito
+            )
+            .presentationDetents([.height(450)])
+            .presentationDragIndicator(.visible)
+        }
     }
     
     private func saveHabit() {
@@ -151,7 +185,8 @@ struct CreateHabitView: View {
             colorItem: getSelectedColor(),
             frequency: getSelectedFrequency(),
             counter: 0,
-            maxCounter: counter
+            maxCounter: counter,
+            selectedWeekDays: frequencySelected == 2 ? weekDaySelection.getSelectedDaysIds() : []
         )
         
         viewModel.addHabit(habit: newHabit)

@@ -22,7 +22,7 @@ extension Color {
             a = Float(components[3])
         }
         
-        if a != 1.0 {
+        if a != Float(1.0) {
             return String(format: "#%02lX%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255), lroundf(a * 255))
         } else {
             return String(format: "#%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255))
@@ -42,14 +42,14 @@ extension Color {
         case 8: // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
-            (a, r, g, b) = (255, 0, 0, 0)
+            (a, r, g, b) = (1, 1, 1, 0)
         }
         
         self.init(
             .sRGB,
             red: Double(r) / 255,
             green: Double(g) / 255,
-            blue: Double(b) / 255,
+            blue:  Double(b) / 255,
             opacity: Double(a) / 255
         )
     }
