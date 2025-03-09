@@ -37,25 +37,7 @@ struct Habit: Identifiable {
     func shouldReset() -> Bool {
         let calendar = Calendar.current
         let now = Date()
-        
-        switch frequency {
-        case .daily:
-            return !calendar.isDate(lastResetDate, inSameDayAs: now)
-            
-        case .weekly:
-            if selectedWeekDays.isEmpty {
-                return false
-            }
-            
-            var weekday = calendar.component(.weekday, from: now) - 1
-            if weekday == 0 { weekday = 7 }
-            
-            if let maxDay = selectedWeekDays.max(), weekday == maxDay {
-                return !calendar.isDate(lastResetDate, inSameDayAs: now)
-            }
-            
-            return false
-        }
+        return !calendar.isDate(lastResetDate, inSameDayAs: now)
     }
     
     mutating func addToHistory(date: Date = Date(), completed: Bool) {

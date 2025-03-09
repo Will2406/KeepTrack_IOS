@@ -21,7 +21,6 @@ class HabitViewModel: ObservableObject {
     
     init() {
         setupHabitsListener()
-        checkAndResetHabits()
         scheduleResetCheck()
     }
     
@@ -97,7 +96,12 @@ class HabitViewModel: ObservableObject {
                 }
                 
                 self.isLoading = false
+                
+                if !self.habits.isEmpty {
+                    self.checkAndResetHabits()
+                }
             }
+        
     }
     
     func addHabit(habit: Habit) {
@@ -116,7 +120,6 @@ class HabitViewModel: ObservableObject {
             "createdAt": FieldValue.serverTimestamp()
         ]
         
-        // Añadir días seleccionados si es semanal
         if habit.frequency == .weekly {
             habitData["selectedWeekDays"] = habit.selectedWeekDays
         }
@@ -182,21 +185,32 @@ class HabitViewModel: ObservableObject {
     }
     
     func resetHabitCounter(habitId: String) {
-        if let habitIndex = habits.firstIndex(where: { $0.id == habitId }) {
-            let updates: [String: Any] = [
-                "counter": 0,
-                "lastResetDate": FieldValue.serverTimestamp()
-            ]
+        guard let habitIndex = habits.firstIndex(where: { $0.id == habitId }) else {
+            return
+        }
+        
+        var updatedHabit = habits[habitIndex]
+        updatedHabit.counter = 0
+        updatedHabit.lastResetDate = Date()
+        
+        let updates: [String: Any] = [
+            "counter": 0,
+            "lastResetDate": FieldValue.serverTimestamp()
+        ]
+        
+        db.collection("habits").document(habitId).updateData(updates) { [weak self] error in
+            guard let self = self else { return }
             
-            db.collection("habits").document(habitId).updateData(updates) { [weak self] error in
-                guard let self = self else { return }
-                
-                if let error = error {
-                    self.errorMessage = "Error restableciendo contador: \(error.localizedDescription)"
+            if let error = error {
+                self.errorMessage = "Error restableciendo contador: \(error.localizedDescription)"
+            } else {
+                DispatchQueue.main.async {
+                    self.habits[habitIndex] = updatedHabit
                 }
             }
         }
     }
+
     
     func updateHabitWeekDays(habitId: String, selectedDays: [Int]) {
         db.collection("habits").document(habitId).updateData([

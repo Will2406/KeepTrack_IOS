@@ -41,7 +41,6 @@ struct HabitItem: View {
                         
                         if frequency == .weekly {
                             Button(action: {
-                                // Configurar días seleccionados previamente
                                 weekDaySelection.weekDays.indices.forEach { index in
                                     weekDaySelection.weekDays[index].isSelected = false
                                 }
@@ -72,7 +71,6 @@ struct HabitItem: View {
                     backgrounColor: colorItem,
                     counter: counter,
                     onIncrement: {
-                        // Verificamos si este hábito se debe mostrar hoy (en caso de ser semanal)
                         if shouldShowToday() {
                             viewModel.incrementHabitCounter(
                                 habitId: id,
@@ -106,23 +104,18 @@ struct HabitItem: View {
             }
     }
     
-    // Función para determinar si el hábito debe mostrarse hoy
     private func shouldShowToday() -> Bool {
         let today = Calendar.current.component(.weekday, from: Date())
-        // Convertir de día de la semana de iOS (1=Domingo) a nuestro formato (1=Lunes)
         let adjustedDay = today == 1 ? 7 : today - 1
         
-        // Si es diario o mensual, siempre se muestra
         if frequency != .weekly {
             return true
         }
         
-        // Si no hay días seleccionados, también lo mostramos
         if selectedWeekDays.isEmpty {
             return true
         }
         
-        // Si es semanal, verificamos si hoy es uno de los días seleccionados
         return selectedWeekDays.contains(adjustedDay)
     }
 }
